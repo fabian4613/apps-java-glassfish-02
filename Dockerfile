@@ -10,13 +10,25 @@ RUN curl -L -o /tmp/glassfish-5.1.0.zip "https://www.eclipse.org/downloads/downl
 
 # Configurar GlassFish
 ENV PATH $PATH:$GLASSFISH_HOME/bin
-RUN echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd && \
-    $GLASSFISH_HOME/bin/asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1 && \
-    $GLASSFISH_HOME/bin/asadmin start-domain domain1 && \
-    $GLASSFISH_HOME/bin/asadmin --user=admin enable-secure-admin && \
-    $GLASSFISH_HOME/bin/asadmin restart-domain domain1 && \
-    $GLASSFISH_HOME/bin/asadmin create-service --name server --serviceuser admin && \
-    rm /tmp/glassfishpwd
+RUN echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd
+
+# Cambiar la contraseña de administrador
+RUN $GLASSFISH_HOME/bin/asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1
+
+# Iniciar el dominio
+RUN $GLASSFISH_HOME/bin/asadmin start-domain domain1
+
+# Habilitar la administración segura
+RUN $GLASSFISH_HOME/bin/asadmin --user=admin enable-secure-admin
+
+# Reiniciar el dominio
+RUN $GLASSFISH_HOME/bin/asadmin restart-domain domain1
+
+# Crear el servicio
+RUN $GLASSFISH_HOME/bin/asadmin create-service --name server --serviceuser admin
+
+# Eliminar el archivo de contraseña temporal
+RUN rm /tmp/glassfishpwd
 
 # Descargar archivos WAR desde el repositorio Git
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
