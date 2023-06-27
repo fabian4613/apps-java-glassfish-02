@@ -22,6 +22,8 @@ ENV PATH="${PATH_GF_BIN}:${PATH}"
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
+RUN apt-get update && apt-get install -y git
+
 RUN true \
     && set -x \
     && apt update \
@@ -65,5 +67,15 @@ RUN true \
     && echo "Installation was successful."
 USER glassfish
 WORKDIR ${PATH_GF_HOME}
+
+# Git clone a repo wars
+RUN git clone https://github.com/fabian4613/apps-java-glassfish-02.git
+
+# Copiar los archivos WAR a la carpeta de despliegue
+RUN cp apps-java-glassfish-02/deployments/*.war /opt/glassfish7/glassfish/domains/domain1/autodeploy
+
+# Eliminar la carpeta clonada
+RUN rm -rf apps-java-glassfish-02
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["asadmin", "start-domain", "--verbose"]
