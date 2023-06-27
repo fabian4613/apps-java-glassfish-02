@@ -13,19 +13,14 @@ ENV PATH $PATH:$GLASSFISH_HOME/bin
 RUN echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd
 
 # Cambiar la contraseña de administrador
-RUN $GLASSFISH_HOME/bin/asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1
-
-# Iniciar el dominio
-RUN $GLASSFISH_HOME/bin/asadmin start-domain domain1
+RUN $GLASSFISH_HOME/bin/asadmin start-domain domain1 && \
+    $GLASSFISH_HOME/bin/asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1 && \
+    $GLASSFISH_HOME/bin/asadmin stop-domain domain1
 
 # Habilitar la administración segura
-RUN $GLASSFISH_HOME/bin/asadmin --user=admin enable-secure-admin
-
-# Reiniciar el dominio
-RUN $GLASSFISH_HOME/bin/asadmin restart-domain domain1
-
-# Crear el servicio
-RUN $GLASSFISH_HOME/bin/asadmin create-service --name server --serviceuser admin
+RUN $GLASSFISH_HOME/bin/asadmin start-domain domain1 && \
+    $GLASSFISH_HOME/bin/asadmin --user=admin enable-secure-admin && \
+    $GLASSFISH_HOME/bin/asadmin stop-domain domain1
 
 # Eliminar el archivo de contraseña temporal
 RUN rm /tmp/glassfishpwd
