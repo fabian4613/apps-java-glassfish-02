@@ -21,7 +21,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH $PATH:$JAVA_HOME/bin
 
 # Instalar GlassFish 5
-RUN wget -q --no-cookies --no-check-certificate "http://download.oracle.com/glassfish/5.1.0/release/glassfish-5.1.0.zip"
+RUN wget -q --no-cookies --no-check-certificate "https://www.eclipse.org/downloads/download.php?file=/glassfish/glassfish-5.1.0.zip&mirror_id=1"
 RUN mv /glassfish-5.1-0.zip /usr/local; cd /usr/local; unzip glassfish-5.1-0.zip ; rm -f glassfish-5.1-0.zip ; cd /
 
 # Configurar variables de entorno
