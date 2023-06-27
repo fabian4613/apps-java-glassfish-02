@@ -19,7 +19,7 @@ COPY start-domain.sh /opt/start-domain.sh
 RUN chmod +x /opt/start-domain.sh
 
 # Puerto de administración
-EXPOSE 4848
+EXPOSE 4848 8080
 
 # Ejecutar el script de inicio cuando se inicie el contenedor
 CMD ["/opt/start-domain.sh"]
