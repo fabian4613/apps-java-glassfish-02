@@ -31,12 +31,6 @@ ENV PATH $PATH:$GF_HOME/bin
 # Permitir que Derby se inicie como un daemon (usado por algunas aplicaciones Java EE, como Pet Store)
 RUN echo "grant { permission java.net.SocketPermission \"localhost:1527\", \"listen\"; };" >> $JAVA_HOME/jre/lib/security/java.policy
 
-# Asegurar la instalación de GF con una contraseña y autorizar el acceso de red
-ADD password_1.txt /tmp/password_1.txt
-ADD password_2.txt /tmp/password_2.txt
-RUN $GF_HOME/bin/asadmin --user admin --passwordfile /tmp/password_1.txt change-admin-password --domain_name domain1 ; $GF_HOME/bin/asadmin start-domain domain1 ; $GF_HOME/bin/asadmin --user admin --passwordfile /tmp/password_2.txt enable-secure-admin ; $GF_HOME/bin/asadmin stop-domain domain1
-RUN rm /tmp/password_?.txt
-
 # Agregar nuestro script de inicio de GF
 ADD start-gf.sh /usr/local/bin/start-gf.sh
 RUN chmod 755 /usr/local/bin/start-gf.sh
