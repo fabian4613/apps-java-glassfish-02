@@ -30,7 +30,7 @@ RUN true \
     && curl -fL "https://repo1.maven.org/maven2/org/glassfish/main/distributions/glassfish/${GLASSFISH_VERSION}/glassfish-${GLASSFISH_VERSION}.zip.asc" -o glassfish.zip.asc \
     && curl -fL "https://repo1.maven.org/maven2/org/glassfish/main/distributions/glassfish/${GLASSFISH_VERSION}/glassfish-${GLASSFISH_VERSION}.zip" -o glassfish.zip \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --batch --keyserver pgp.mit.edu --recv-keys D4A77129F00F736293BE5A51AFC18A2271EDDFE1 \
+    && gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D4A77129F00F736293BE5A51AFC18A2271EDDFE1 \
     && gpg --batch --verify glassfish.zip.asc glassfish.zip \
     && rm glassfish.zip.asc \
     && echo "$GLASSFISH_DOWNLOAD_SHA512 glassfish.zip" | sha512sum --strict --check \
