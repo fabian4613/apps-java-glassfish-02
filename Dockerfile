@@ -12,15 +12,14 @@ RUN curl -L -o /tmp/glassfish-5.1.0.zip "https://www.eclipse.org/downloads/downl
 ENV GLASSFISH_HOME=/opt/glassfish5
 ENV PATH=$PATH:$GLASSFISH_HOME/bin
 
-# Cambiar la contraseña de administrador y luego iniciar y detener el dominio
-RUN echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd && \
-    asadmin start-domain && \
-    asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1 && \
-    asadmin stop-domain && \
-    rm /tmp/glassfishpwd
+# Copiar el script de inicio
+COPY start-domain.sh /opt/start-domain.sh
+
+# Dar permisos de ejecución al script
+RUN chmod +x /opt/start-domain.sh
 
 # Puerto de administración
-EXPOSE 4848 8080
+EXPOSE 4848
 
-# Comando predeterminado para ejecutar GlassFish
-CMD ["asadmin", "start-domain", "--verbose"]
+# Ejecutar el script de inicio cuando se inicie el contenedor
+CMD ["/opt/start-domain.sh"]
