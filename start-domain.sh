@@ -8,7 +8,12 @@ echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd
 asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1
 rm /tmp/glassfishpwd
 
-# Detener el dominio
+# Habilitar el acceso seguro
+asadmin start-domain
+echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd
+echo 'AS_ADMIN_NEWPASSWORD=adminadmin' >> /tmp/glassfishpwd
+asadmin --user=admin --passwordfile=/tmp/glassfishpwd enable-secure-admin
+rm /tmp/glassfishpwd
 asadmin stop-domain --domain_name domain1
 
 # Clonar el repositorio de GitHub
