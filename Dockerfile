@@ -1,15 +1,9 @@
-# GlassFish 5 + Oracle JDK 8
-#
-# VERSION     0.5
-# BUILD       20150828
-
 FROM ubuntu:latest
-MAINTAINER "Yoshio Terada" "Yoshio.Terada@microsoft.com"
+MAINTAINER "Carlos Fabian Pavia - DGSISAN - GCBA"
 
-# Establecer la zona horaria
-RUN echo "America/Argentina/Buenos_Aires" > /etc/timezone
-RUN ln -fs /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
-RUN dpkg-reconfigure --frontend noninteractive tzdata
+# Establecer la zona horaria de forma directa
+ENV TZ=America/Argentina/Buenos_Aires
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Configurar el idioma
 RUN apt-get update && apt-get install -y locales
