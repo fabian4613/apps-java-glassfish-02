@@ -4,7 +4,7 @@ FROM adoptopenjdk:11-jdk-hotspot
 ENV GLASSFISH_VERSION 5.1.0
 ENV GLASSFISH_HOME /usr/local/glassfish5
 RUN apt-get update && apt-get install -y curl unzip zip && rm -rf /var/lib/apt/lists/*
-RUN curl -L -o /tmp/glassfish-5.1.0.zip https://download.eclipse.org/ee4j/glassfish/glassfish-5.1.0.zip && \
+RUN curl -L -o /tmp/glassfish-5.1.0.zip "https://www.eclipse.org/downloads/download.php?file=/glassfish/glassfish-5.1.0.zip&mirror_id=1" && \
     unzip /tmp/glassfish-5.1.0.zip -d /usr/local && \
     rm -f /tmp/glassfish-5.1.0.zip
 
