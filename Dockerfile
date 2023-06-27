@@ -1,39 +1,26 @@
 FROM adoptopenjdk:11-jdk-hotspot
 
-# Instalar GlassFish
-ENV GLASSFISH_VERSION 5.1.0
-ENV GLASSFISH_HOME /usr/local/glassfish5
+# Instalar herramientas necesarias
 RUN apt-get update && apt-get install -y curl unzip zip && rm -rf /var/lib/apt/lists/*
+
+# Descargar y descomprimir GlassFish
 RUN curl -L -o /tmp/glassfish-5.1.0.zip "https://www.eclipse.org/downloads/download.php?file=/glassfish/glassfish-5.1.0.zip&mirror_id=1" && \
-    unzip /tmp/glassfish-5.1.0.zip -d /usr/local && \
-    rm -f /tmp/glassfish-5.1.0.zip
+    unzip /tmp/glassfish-5.1.0.zip -d /opt && \
+    rm /tmp/glassfish-5.1.0.zip
 
-# Configurar GlassFish
-ENV PATH $PATH:$GLASSFISH_HOME/bin
-RUN echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd
+# Establecer variables de entorno
+ENV GLASSFISH_HOME=/opt/glassfish5
+ENV PATH=$PATH:$GLASSFISH_HOME/bin
 
-# Cambiar la contraseña de administrador
-RUN $GLASSFISH_HOME/bin/asadmin start-domain domain1 && \
-    $GLASSFISH_HOME/bin/asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1 && \
-    $GLASSFISH_HOME/bin/asadmin stop-domain domain1
+# Cambiar la contraseña de administrador y luego iniciar y detener el dominio
+RUN echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd && \
+    asadmin start-domain && \
+    asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1 && \
+    asadmin stop-domain && \
+    rm /tmp/glassfishpwd
 
-# Habilitar la administración segura
-RUN $GLASSFISH_HOME/bin/asadmin start-domain domain1 && \
-    $GLASSFISH_HOME/bin/asadmin --user=admin enable-secure-admin && \
-    $GLASSFISH_HOME/bin/asadmin stop-domain domain1
+# Puerto de administración
+EXPOSE 4848 8080
 
-# Eliminar el archivo de contraseña temporal
-RUN rm /tmp/glassfishpwd
-
-# Descargar archivos WAR desde el repositorio Git
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-RUN git clone https://github.com/fabian4613/apps-java-glassfish-02.git /tmp/apps-java-glassfish-02
-
-# Autodespliegue de archivos WAR descargados
-RUN cp /tmp/apps-java-glassfish-02/*.war $GLASSFISH_HOME/domains/domain1/autodeploy/
-
-# Puerto de escucha
-EXPOSE 8080 4848
-
-# Comando para iniciar GlassFish
-CMD $GLASSFISH_HOME/bin/asadmin start-domain --verbose
+# Comando predeterminado para ejecutar GlassFish
+CMD ["asadmin", "start-domain", "--verbose"]
