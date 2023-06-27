@@ -12,9 +12,9 @@ RUN curl -L -o /tmp/glassfish-5.1.0.zip "https://www.eclipse.org/downloads/downl
 ENV PATH $PATH:$GLASSFISH_HOME/bin
 RUN echo 'AS_ADMIN_PASSWORD=adminadmin' > /tmp/glassfishpwd && \
     $GLASSFISH_HOME/bin/asadmin --user=admin --passwordfile=/tmp/glassfishpwd change-admin-password --domain_name domain1 && \
-    $GLASSFISH_HOME/bin/asadmin start-domain && \
+    $GLASSFISH_HOME/bin/asadmin start-domain domain1 && \
     $GLASSFISH_HOME/bin/asadmin --user=admin enable-secure-admin && \
-    $GLASSFISH_HOME/bin/asadmin restart-domain && \
+    $GLASSFISH_HOME/bin/asadmin restart-domain domain1 && \
     $GLASSFISH_HOME/bin/asadmin create-service --name server --serviceuser admin && \
     rm /tmp/glassfishpwd
 
