@@ -69,13 +69,13 @@ USER glassfish
 WORKDIR ${PATH_GF_HOME}
 
 # Git clone a repo wars
-RUN git clone https://github.com/fabian4613/apps-java-glassfish-02.git
+RUN git clone https://github.com/fabian4613/glassfish7-deployWAR.git
 
 # Copiar los archivos WAR a la carpeta de despliegue
-RUN cp apps-java-glassfish-02/deployments/*.war /opt/glassfish7/glassfish/domains/domain1/autodeploy
+RUN cp glassfish7-deployWAR/deployments/*.war /opt/glassfish7/glassfish/domains/domain1/autodeploy
 
 # Eliminar la carpeta clonada
-RUN rm -rf apps-java-glassfish-02
+RUN rm -rf glassfish7-deployWAR
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["asadmin", "start-domain", "--verbose"]
