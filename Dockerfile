@@ -68,14 +68,9 @@ RUN true \
 USER glassfish
 WORKDIR ${PATH_GF_HOME}
 
-# Git clone a repo wars
-RUN git clone https://github.com/fabian4613/glassfish7-deployWAR.git
 
 # Copiar los archivos WAR a la carpeta de despliegue
-RUN cp glassfish7-deployWAR/deployments/*.war /opt/glassfish7/glassfish/domains/domain1/autodeploy
-
-# Eliminar la carpeta clonada
-RUN rm -rf glassfish7-deployWAR
+COPY deployments/*.war /opt/glassfish7/glassfish/domains/domain1/autodeploy
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["asadmin", "start-domain", "--verbose"]
